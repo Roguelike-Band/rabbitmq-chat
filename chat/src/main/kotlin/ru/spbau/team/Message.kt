@@ -29,7 +29,7 @@ data class Message(
         val message: String
 ) {
         override fun toString(): String {
-                val sdf = SimpleDateFormat("MMM dd,yyyy HH:mm:ss")
+                val sdf = SimpleDateFormat("dd MMM yyyy HH:mm:ss")
                 return "[${sdf.format(timestamp)}] ${senderName}: $message"
         }
 }
