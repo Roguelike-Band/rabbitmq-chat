@@ -5,15 +5,15 @@ import com.beust.jcommander.Parameter
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
 
-class Telekilogram(serverIP: String) {
+class Telekilogram(serverIP: String, serverLogin: String, serverPassword: String) {
     private val factory = ConnectionFactory()
     private val connection: Connection
     private val channelNameToChannel = mutableMapOf<String, TelekilogramChannel>()
 
     init {
         factory.host = serverIP
-        factory.password = "test"
-        factory.username = "test"
+        factory.password = serverLogin
+        factory.username = serverPassword
         connection = factory.newConnection()
     }
 
@@ -23,7 +23,6 @@ class Telekilogram(serverIP: String) {
 
         val newQueue = channel.queueDeclare().queue
         channel.queueBind(newQueue, channelName, "")
-
         val createdChannel = TelekilogramChannel(channelName, channel, newQueue)
         channelNameToChannel[channelName] = createdChannel
         return createdChannel
@@ -67,7 +66,7 @@ class CliArguments {
 fun main(args: Array<String>) {
     val arguments = CliArguments()
     JCommander.newBuilder().addObject(arguments).build().parse(*args)
-    val telekilogram = Telekilogram("localhost")
+    val telekilogram = Telekilogram(arguments.address, arguments.login, arguments.password)
     val channel = telekilogram.subscribeOrCreateChannel("randdmChannel")
     while (true) {
         val message = readLine()!!
