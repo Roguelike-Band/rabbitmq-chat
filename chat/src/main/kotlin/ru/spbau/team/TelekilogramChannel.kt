@@ -43,7 +43,7 @@ class TelekilogramChannel(
             channelName,
             "",
             null,
-            json.stringify(message.serializer(), message).toByteArray()
+            json.stringify(Message.serializer(), message).toByteArray()
         )
     }
 
