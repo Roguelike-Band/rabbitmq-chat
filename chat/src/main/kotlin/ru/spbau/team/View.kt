@@ -19,7 +19,7 @@ class View : Application() {
 
         val arguments = CliArguments()
         var args = parameters.unnamed
-        JCommander.newBuilder().addObject(arguments).build().parse(*args)
+        JCommander.newBuilder().addObject(arguments).build().parse(*args.toTypedArray())
         val telekilogram = Telekilogram(arguments.address, arguments.login, arguments.password)
 
         p0.title = "Telekilogram"
