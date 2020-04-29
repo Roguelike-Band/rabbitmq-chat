@@ -10,11 +10,13 @@ class CommandLineInterface {
             val arguments = CliArguments()
             JCommander.newBuilder().addObject(arguments).build().parse(*args)
             val telekilogram = Telekilogram(arguments.address, arguments.login, arguments.password)
+            val chats = mutableMapOf<String, TelekilogramChannel>()
             while (true) {
                 val chat = readLine()!!
+                val chatChannel = chats[chat] ?: telekilogram.subscribeOrCreateChannel(chat)
+                chats[chat] = chatChannel
                 val message = readLine()!!
-                val channel = telekilogram.subscribeOrCreateChannel(chat)
-                channel.sendMessage(Message(arguments.getNickname(), Date(), message))
+                chatChannel.sendMessage(Message(arguments.getNickname(), Date(), message))
             }
         }
     }
