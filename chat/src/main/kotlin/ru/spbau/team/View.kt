@@ -10,7 +10,7 @@ import javafx.stage.Stage
 
 class View : Application() {
 
-    val messageList =  FXCollections.observableArrayList(listOf("kek", "lol", "validol"))
+    val messageList = FXCollections.observableArrayList(listOf("kek", "lol", "validol"))
 
     override fun start(p0: Stage) {
         p0.title = "Telekilogram"
