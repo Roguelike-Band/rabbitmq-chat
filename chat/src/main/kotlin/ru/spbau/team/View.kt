@@ -55,7 +55,7 @@ class View : Application() {
                     }
                 }
 
-                val messages = FXCollections.observableArrayList(teleChannel.messages)
+                val messages = teleChannel.messages
                 val messageListView = ListView(messages)
                 messageListView.prefHeight = WINDOW_HEIGHT - COMPOSE_HEIGHT
                 panex.add(messageField, 0, 0)
