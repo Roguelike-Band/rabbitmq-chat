@@ -34,5 +34,5 @@ compileTestKotlin {
 }
 
 application {
-    mainClassName = 'ru.spbau.team.CommandLineInterface'
+    mainClassName = 'ru.spbau.team.Main'
 }
