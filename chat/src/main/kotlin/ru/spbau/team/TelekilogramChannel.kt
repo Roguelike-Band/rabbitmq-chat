@@ -12,7 +12,7 @@ class TelekilogramChannel(
     private val channel: Channel,
     private val queueName: String
 ) {
-    private val messages = mutableListOf<Message>()
+    val messages = arrayListOf<Message>()
 
     @Synchronized
     private fun addMessage(message: Message) {
