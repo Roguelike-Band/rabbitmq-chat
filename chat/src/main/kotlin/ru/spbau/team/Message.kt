@@ -12,12 +12,12 @@ import java.util.*
 object DateSerializer : KSerializer<Date> {
         override val descriptor: SerialDescriptor = SerialDescriptor("DateSerializer")
 
-        override fun serialize(output: Encoder, obj: Date) {
-                output.encodeString(obj.time.toString())
+        override fun serialize(encoder: Encoder, value: Date) {
+                encoder.encodeString(value.time.toString())
         }
 
-        override fun deserialize(input: Decoder): Date {
-                return Date(input.decodeString().toLong())
+        override fun deserialize(decoder: Decoder): Date {
+                return Date(decoder.decodeString().toLong())
         }
 }
 
