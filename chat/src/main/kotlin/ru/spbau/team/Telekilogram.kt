@@ -1,5 +1,7 @@
 package ru.spbau.team
 
+import com.beust.jcommander.JCommander
+import com.beust.jcommander.Parameter
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
 
@@ -35,7 +37,36 @@ class Telekilogram(serverIP: String) {
     }
 }
 
-fun main() {
+class CliArguments {
+    @Parameter(
+        names = ["-address"]
+    )
+    var address: String = "127.0.0.1"
+        private set
+
+    @Parameter(
+        names = ["-login"]
+    )
+    var login: String = "guest"
+        private set
+
+    @Parameter(
+        names = ["-password"]
+    )
+    var password: String = "guest"
+        private set
+
+    @Parameter(
+        required = true
+    )
+    private var otherArguments: MutableList<String> = mutableListOf()
+
+    fun getNickname() = otherArguments[0]
+}
+
+fun main(args: Array<String>) {
+    val arguments = CliArguments()
+    JCommander.newBuilder().addObject(arguments).build().parse(*args)
     val telekilogram = Telekilogram("localhost")
     val channel = telekilogram.subscribeOrCreateChannel("randdmChannel")
     while (true) {
