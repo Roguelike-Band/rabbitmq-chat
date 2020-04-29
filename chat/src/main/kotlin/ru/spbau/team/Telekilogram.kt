@@ -2,6 +2,7 @@ package ru.spbau.team
 
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
+import java.util.*
 
 class Telekilogram(serverIP: String) {
     private val factory = ConnectionFactory()
@@ -40,6 +41,6 @@ fun main() {
     val channel = telekilogram.subscribeOrCreateChannel("randdmChannel")
     while (true) {
         val message = readLine()!!
-        channel.sendMessage(message)
+        channel.sendMessage(Message("Igor", Date(), message))
     }
 }
