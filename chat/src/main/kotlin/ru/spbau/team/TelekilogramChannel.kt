@@ -1,9 +1,7 @@
 package ru.spbau.team
 
-import com.rabbitmq.client.AMQP
-import com.rabbitmq.client.Channel
-import com.rabbitmq.client.DefaultConsumer
-import com.rabbitmq.client.Envelope
+import com.rabbitmq.client.*
+import javafx.application.Platform
 import javafx.collections.FXCollections
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
@@ -11,13 +9,16 @@ import kotlinx.serialization.json.JsonConfiguration
 class TelekilogramChannel(
     val channelName: String,
     private val channel: Channel,
-    private val queueName: String
+    private val queueName: String,
+    private val connection: Connection
 ) {
     val messages = FXCollections.observableArrayList<Message>()
 
     @Synchronized
     private fun addMessage(message: Message) {
-        messages.add(message)
+        Platform.runLater {
+            messages.add(message)
+        }
     }
 
     init {
@@ -50,5 +51,6 @@ class TelekilogramChannel(
 
     fun close() {
         channel.close()
+        connection.close()
     }
 }
