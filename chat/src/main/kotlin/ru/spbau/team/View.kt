@@ -7,12 +7,21 @@ import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
 import javafx.stage.Stage
+import com.beust.jcommander.JCommander
+import javafx.collections.ObservableList
+import java.util.*
 
 class View : Application() {
 
-    val messageList = FXCollections.observableArrayList(listOf("kek", "lol", "validol"))
+//    val messageList = FXCollections.observableArrayList(listOf("kek", "lol", "validol"))
 
     override fun start(p0: Stage) {
+
+        val arguments = CliArguments()
+        var args = parameters.unnamed
+        JCommander.newBuilder().addObject(arguments).build().parse(*args)
+        val telekilogram = Telekilogram(arguments.address, arguments.login, arguments.password)
+
         p0.title = "Telekilogram"
 
         val pane = TabPane()
@@ -27,8 +36,8 @@ class View : Application() {
         subscribeButton.prefWidth = SEND_WIDTH
         subscribeButton.onMouseClicked = EventHandler {
             if (channelName.text.isNotEmpty()) {
-                // подписаться на канал
                 val channel = channelName.text
+                val teleChannel = telekilogram.subscribeOrCreateChannel(channel)
                 channelName.text = ""
                 val panex = GridPane()
 
@@ -41,12 +50,13 @@ class View : Application() {
                 sendButton.prefWidth = SEND_WIDTH
                 sendButton.onMouseClicked = EventHandler {
                     if (messageField.text.isNotEmpty()) {
-                        // отправить сообщеньку
+                        teleChannel.sendMessage(Message(arguments.getNickname(), Date(), messageField.text))
                         messageField.text = ""
                     }
                 }
 
-                val messageListView = ListView(messageList)
+                val messages = FXCollections.observableArrayList(teleChannel.messages)
+                val messageListView = ListView(messages)
                 messageListView.prefHeight = WINDOW_HEIGHT - COMPOSE_HEIGHT
                 panex.add(messageField, 0, 0)
                 panex.add(sendButton, 1, 0)
