@@ -12,16 +12,11 @@ class TelekilogramChannel(
     private val channel: Channel,
     private val queueName: String
 ) {
-    private val messages = mutableListOf<String>()
+    private val messages = mutableListOf<Message>()
 
     @Synchronized
-    private fun addMessage(message: String) {
+    private fun addMessage(message: Message) {
         messages.add(message)
-    }
-
-    @Synchronized
-    fun getMessages(): List<String> {
-        return messages
     }
 
     init {
@@ -32,7 +27,9 @@ class TelekilogramChannel(
                 properties: AMQP.BasicProperties,
                 body: ByteArray
             ) {
-                val message = String(body, Charsets.UTF_8)
+                val json = Json(JsonConfiguration.Stable)
+                val messageJson = String(body, Charsets.UTF_8)
+                val message = json.parse(Message.serializer(), messageJson)
                 addMessage(message)
                 println(message)
             }
