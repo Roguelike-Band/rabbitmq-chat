@@ -1,7 +1,5 @@
 package ru.spbau.team
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
 
