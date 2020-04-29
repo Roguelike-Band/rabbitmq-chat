@@ -1,8 +1,11 @@
 package ru.spbau.team
 
-import com.rabbitmq.client.*
+import com.rabbitmq.client.AMQP
+import com.rabbitmq.client.Channel
+import com.rabbitmq.client.DefaultConsumer
+import com.rabbitmq.client.Envelope
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.JsonConfiguration
 
 class TelekilogramChannel(
     val channelName: String,
@@ -43,7 +46,7 @@ class TelekilogramChannel(
             channelName,
             "",
             null,
-            json.stringify(Message.serializer(), message).toByteArray()
+            json.stringify(Message.serializer(), message).toByteArray(Charsets.UTF_8)
         )
     }
 
