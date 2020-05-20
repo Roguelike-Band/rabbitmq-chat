@@ -9,6 +9,7 @@ import javafx.scene.layout.GridPane
 import javafx.stage.Stage
 import com.beust.jcommander.JCommander
 import javafx.collections.ObservableList
+import javafx.event.Event
 import java.util.*
 
 class View : Application() {
@@ -18,7 +19,7 @@ class View : Application() {
     override fun start(p0: Stage) {
 
         val arguments = CliArguments()
-        var args = parameters.unnamed
+        val args = parameters.unnamed
         JCommander.newBuilder().addObject(arguments).build().parse(*args.toTypedArray())
         val telekilogram = Telekilogram(arguments.address, arguments.login, arguments.password)
 
@@ -68,6 +69,7 @@ class View : Application() {
         }
         pane0.add(channelName, 0, 0)
         pane0.add(subscribeButton, 1, 0)
+
 
         val tab0 = Tab("New channel")
         tab0.content = pane0

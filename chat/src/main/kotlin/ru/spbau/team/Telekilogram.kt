@@ -1,6 +1,5 @@
 package ru.spbau.team
 
-import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
 
 class Telekilogram(serverIP: String, serverLogin: String, serverPassword: String) {
