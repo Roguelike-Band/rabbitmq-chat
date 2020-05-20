@@ -10,18 +10,6 @@ class CliArguments {
         private set
 
     @Parameter(
-        names = ["-login"]
-    )
-    var login: String = "guest"
-        private set
-
-    @Parameter(
-        names = ["-password"]
-    )
-    var password: String = "guest"
-        private set
-
-    @Parameter(
         required = true
     )
     private var otherArguments: MutableList<String> = mutableListOf()

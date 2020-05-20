@@ -1,15 +1,39 @@
 package ru.spbau.team
 
 import com.rabbitmq.client.ConnectionFactory
+import java.io.FileInputStream
+import java.security.KeyStore
+import javax.net.ssl.KeyManagerFactory
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManagerFactory
 
-class Telekilogram(serverIP: String, serverLogin: String, serverPassword: String) {
+
+class Telekilogram(serverIP: String) {
     private val factory = ConnectionFactory()
     private val channelNameToChannel = mutableMapOf<String, TelekilogramChannel>()
 
     init {
         factory.host = serverIP
-        factory.password = serverLogin
-        factory.username = serverPassword
+        factory.port = 5671
+
+        val keyPassphrase = "password".toCharArray()
+        val ks = KeyStore.getInstance("PKCS12")
+        ks.load(FileInputStream("../result/client_key.p12"), keyPassphrase)
+
+        val kmf = KeyManagerFactory.getInstance("SunX509")
+        kmf.init(ks, keyPassphrase)
+
+        val trustPassphrase = "rabbitstore".toCharArray()
+        val tks = KeyStore.getInstance("JKS")
+        tks.load(FileInputStream("../result/rabbitstore"), trustPassphrase)
+
+        val tmf = TrustManagerFactory.getInstance("SunX509")
+        tmf.init(tks)
+
+        val c = SSLContext.getInstance("TLSv1.2")
+        c.init(kmf.keyManagers, tmf.trustManagers, null)
+
+        factory.useSslProtocol(c)
     }
 
     fun subscribeOrCreateChannel(channelName: String): TelekilogramChannel {

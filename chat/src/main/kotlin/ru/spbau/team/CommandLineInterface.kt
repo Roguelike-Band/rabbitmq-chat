@@ -9,7 +9,7 @@ class CommandLineInterface {
         fun main(args: Array<String>) {
             val arguments = CliArguments()
             JCommander.newBuilder().addObject(arguments).build().parse(*args)
-            val telekilogram = Telekilogram(arguments.address, arguments.login, arguments.password)
+            val telekilogram = Telekilogram(arguments.address)
             val chats = mutableMapOf<String, TelekilogramChannel>()
             while (true) {
                 val chat = readLine()!!
